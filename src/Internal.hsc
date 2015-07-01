@@ -17,9 +17,9 @@ C.context $ C.baseCtx <> spielCtx
 C.include "foo.c"
 
 freeFoo :: Ptr Foo -- ^ Pointer to head of array
-        -> IO ()
+        -> IO C.CInt
 freeFoo arr = [C.block| int {
-    struct a0_foo *arr = $(struct a0_foo *arr);
+    struct foo *arr = $(struct foo *arr);
     free(arr);
   }
 |]

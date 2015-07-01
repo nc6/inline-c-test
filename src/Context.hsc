@@ -8,7 +8,7 @@ module Context where
 import Control.Monad (liftM2)
 
 import qualified Data.Map as Map
-import Data.Word (Word64(..))
+import Data.Word (Word64)
 
 import Foreign.Storable
   ( Storable(..) )
@@ -29,17 +29,17 @@ data Foo = Foo { f_slithy :: {-# UNPACK #-} !Word64
   deriving (Eq, Show)
 
 instance Storable Foo where
-  sizeOf    _           = #{size struct a0_foo}
-  alignment _           = #{alignment struct a0_foo}
+  sizeOf    _           = #{size struct foo}
+  alignment _           = #{alignment struct foo}
   peek      p           = liftM2 Foo
-                            (#{peek struct a0_foo, f_slithy} p)
-                            (#{peek struct a0_foo, f_toves} p)
-  poke      p (Foo c k) = do #{poke struct a0_foo, f_slithy} p c
-                             #{poke struct a0_foo, f_toves} p k
+                            (#{peek struct foo, f_slithy} p)
+                            (#{peek struct foo, f_toves} p)
+  poke      p (Foo c k) = do #{poke struct foo, f_slithy} p c
+                             #{poke struct foo, f_toves} p k
 
 spielCtx :: C.Context
 spielCtx = mempty {
   C.ctxTypesTable = Map.fromList [
-    (C.TypeName "struct a0_foo", [t| Foo |])
+    (C.Struct "foo", [t| Foo |])
   ]
 }
